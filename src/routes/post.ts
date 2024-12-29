@@ -86,7 +86,7 @@ const getPosts = async (req: Request, res: Response) => {
 
             return {
                 id: post._id,
-                title: post.title,
+                title: post.title.toUpperCase(),
                 author: {
                     username: author.username,                    
                 },
