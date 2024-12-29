@@ -81,8 +81,6 @@ const getPosts = async (req: Request, res: Response) => {
             { $unwind: '$author' }
         ])
 
-        console.log(posts.map((post) => post.sortValue))
-
         const responsePosts = posts.map((post) => {
             const author = post.author as unknown as AuthorWithUsername
 
@@ -95,6 +93,14 @@ const getPosts = async (req: Request, res: Response) => {
                 score: post.score,
                 upvotes: post.upvotes,
                 downvotes: post.downvotes,
+                createdAt: new Date(post.createdAt).toLocaleString('sv-SE', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                }),
+                updatedAt: new Date(post.updatedAt).toLocaleString('sv-SE'),
             }
         })
 
@@ -143,7 +149,25 @@ const getPost = async (req: Request, res: Response) => {
                 id: author._id,
                 username: author.username,
             },
-            comments: post.comments,
+            comments: post.comments.map(comment => ({
+                ...comment.toObject(),
+                createdAt: new Date(comment.createdAt).toLocaleString('sv-SE', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                }),
+                updatedAt: new Date(comment.updatedAt).toLocaleString('sv-SE')
+            })),
+            createdAt: new Date(post.createdAt).toLocaleString('sv-SE', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+            }),
+            updatedAt: new Date(post.updatedAt).toLocaleString('sv-SE'),
         })
     } catch (error) {
         console.error(error)
