@@ -144,7 +144,7 @@ const getPost = async (req: Request, res: Response) => {
 
         res.status(200).json({
             id: post._id,
-            title: post.title,
+            title: post.title.toUpperCase(),
             content: post.content,
             author: {
                 id: author._id,
